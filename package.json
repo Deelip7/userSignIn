@@ -1,0 +1,23 @@
+{
+  "name": "usersignin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "dev": "nodemon index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Deelip7/userSignIn.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Deelip7/userSignIn/issues"
+  },
+  "homepage": "https://github.com/Deelip7/userSignIn#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
