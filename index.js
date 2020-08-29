@@ -7,7 +7,7 @@ const server = http.createServer((req, res) => {
 
   const pathExtensionName = path.extname(filePath);
 
-  const contentType = "text/html";
+  let contentType = "text/html";
 
   switch (pathExtensionName) {
     case ".js":
@@ -30,19 +30,18 @@ const server = http.createServer((req, res) => {
   fs.readFile(filePath, (err, content) => {
     if (err) {
       if (err.code === "ENOENT") {
+        console.log(req.url);
         res.writeHead(404, { "content-type": contentType });
         res.end(`<h1> 404 | Page Not Found!</h1>`);
+      } else {
+        res.writeHead(500);
+        res.end(`Server Error: ${err.code}`);
       }
+    } else {
+      res.writeHead(200, { "content-type": contentType });
+      res.end(content, "utf-8");
     }
   });
-
-  if (req.url === "/") {
-    fs.readFile(path.join(__dirname, "public", "index.html"), (err, content) => {
-      if (err) throw err;
-      res.writeHead(200, { "content-type": "text/html" });
-      res.end(content);
-    });
-  }
 });
 
 const PORT = process.env.PORT || 5000;
