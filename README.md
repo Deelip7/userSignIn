@@ -1,4 +1,4 @@
-# userSignIn
+# User sign in project using Node.js & Heroku
 
 ### Install package manager
 
