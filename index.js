@@ -1,24 +1,17 @@
 const path = require("path");
 const fs = require("fs");
 const http = require("http");
-const { parse } = require("querystring");
+const queryString = require("querystring");
 
 const server = http.createServer((req, res) => {
-  console.log(req.method);
-
+  console.clear();
   if (req.method === "POST") {
-    let body = "";
-    req.on("data", (chunk) => {
-      body += chunk.toString(); // convert Buffer to string
-    });
-    req.on("end", () => {
-      console.log(parse(body));
-      //   res.end("ok");
-    });
+    collectRequestData(req, res);
   } else if (req.method === "GET") {
     sendRequestContent(req, res);
   }
 
+  //Send respond if request is GET -------------------------------------------
   function sendRequestContent(req, res) {
     const filePath = path.join(__dirname, "public", req.url === "/" ? "index.html" : req.url);
 
@@ -26,6 +19,7 @@ const server = http.createServer((req, res) => {
 
     let contentType = "text/html";
 
+    //Dynamic build File path -------------------------------------------
     switch (pathExtensionName) {
       case ".js":
         contentType = "text/javascript";
@@ -44,10 +38,10 @@ const server = http.createServer((req, res) => {
         break;
     }
 
+    //Read File-------------------------------------------
     fs.readFile(filePath, (err, content) => {
       if (err) {
         if (err.code === "ENOENT") {
-          console.log(req.url);
           res.writeHead(404, { "content-type": contentType });
           res.end(`<h1> 404 | Page Not Found!</h1>`);
         } else {
@@ -62,6 +56,24 @@ const server = http.createServer((req, res) => {
   }
 });
 
+function collectRequestData(req, res) {
+  const FORM_URLENCODED = "application/x-www-form-urlencoded";
+
+  if (req.headers["content-type"] === FORM_URLENCODED) {
+    let body = "";
+    req.on("data", (chunk) => {
+      body += chunk.toString();
+    });
+    req.on("end", () => {
+      body = queryString.parse(body);
+      bodyEmail = JSON.stringify(body.email);
+      bodyPassword = JSON.stringify(body.password);
+
+      console.log(bodyEmail, bodyPassword);
+    });
+    res.end(`<h1>Request Send</h1>`);
+  }
+}
 const PORT = process.env.PORT || 5000;
 
-server.listen(PORT, console.log(`Server running on port: ${PORT}`));
+server.listen(PORT);
