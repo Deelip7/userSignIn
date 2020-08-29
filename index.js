@@ -5,7 +5,6 @@ const http = require("http");
 
 const server = http.createServer((req, res) => {
   if (req.url === "/") {
-    console.log("working");
     fs.readFile(path.join(__dirname, "public", "index.html"), (err, content) => {
       if (err) throw err;
       res.writeHead(200, { "content-type": "text/html" });
