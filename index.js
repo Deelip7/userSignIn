@@ -4,38 +4,6 @@ const http = require("http");
 const queryString = require("querystring");
 const mongoose = require("mongoose");
 
-mongoose.connect("mongodb+srv://user7:user7@cluster0.gthxj.mongodb.net/<dbname>?retryWrites=true&w=majority", { useUnifiedTopology: true, useNewUrlParser: true }, (err) => {
-  if (err) console.error(err);
-  else console.log("Connected to the mongodb");
-});
-
-// const PostSchema = mongoose.Schema({
-//   userEmail: String,
-//   userPassword: String,
-// });
-const noteSchema = new mongoose.Schema({
-  // content: String,
-  // date: Date,
-  // important: Boolean,
-  userEmail: String,
-  userPassword: String,
-});
-
-const Note = mongoose.model("Note", noteSchema);
-
-const note = new Note({
-  content: "HTML is Easy",
-  date: new Date(),
-  important: true,
-
-  userEmail: String,
-  userPassword: String,
-});
-
-note.save().then((result) => {
-  console.log("note saved!");
-  mongoose.connection.close();
-});
 // -------------------------------------------
 
 const server = http.createServer((req, res) => {
@@ -123,12 +91,33 @@ class UserData {
   }
 }
 
-let storeUserDataArray = [];
 function addData(data) {
   let userE = data.userEmail;
   let userP = data.userPassword;
-  storeUserDataArray.push({ userE, userP });
-  console.log(storeUserDataArray);
+
+  // ------------------------------------------------------
+
+  mongoose.connect("mongodb+srv://user7:user7@cluster0.gthxj.mongodb.net/<dbname>?retryWrites=true&w=majority", { useUnifiedTopology: true, useNewUrlParser: true }, (err) => {
+    if (err) console.error(err);
+    else console.log("Connected to the mongodb");
+  });
+
+  const noteSchema = new mongoose.Schema({
+    userEmail: String,
+    userPassword: String,
+  });
+
+  const Note = mongoose.model("Note", noteSchema);
+
+  const note = new Note({
+    userEmail: userE,
+    userPassword: userP,
+  });
+
+  note.save().then((result) => {
+    console.log("note saved!");
+    mongoose.connection.close();
+  });
 }
 
 server.listen(PORT);
