@@ -2,11 +2,17 @@ const path = require("path");
 const fs = require("fs");
 const http = require("http");
 const queryString = require("querystring");
+const mongoose = require("mongoose");
+
+mongoose.connect("mongodb+srv://user7:user7@cluster0.gthxj.mongodb.net/<dbname>?retryWrites=true&w=majority", { useUnifiedTopology: true, useNewUrlParser: true }, (err) => {
+  if (err) console.error(err);
+  else console.log("Connected to the mongodb");
+});
 
 const server = http.createServer((req, res) => {
   console.clear();
   if (req.method === "POST") {
-    collectRequestData(req, res);
+    getRequestData(req, res);
   } else if (req.method === "GET") {
     sendRequestContent(req, res);
   }
@@ -56,7 +62,7 @@ const server = http.createServer((req, res) => {
   }
 });
 
-function collectRequestData(req, res) {
+function getRequestData(req, res) {
   const FORM_URLENCODED = "application/x-www-form-urlencoded";
 
   if (req.headers["content-type"] === FORM_URLENCODED) {
@@ -65,15 +71,35 @@ function collectRequestData(req, res) {
       body += chunk.toString();
     });
     req.on("end", () => {
-      body = queryString.parse(body);
-      bodyEmail = JSON.stringify(body.email);
-      bodyPassword = JSON.stringify(body.password);
-
-      console.log(bodyEmail, bodyPassword);
+      parseRequestData(body);
     });
     res.end(`<h1>Request Send</h1>`);
   }
 }
 const PORT = process.env.PORT || 5000;
+
+function parseRequestData(body) {
+  userSignInData = queryString.parse(body);
+  userSignInEmail = JSON.stringify(userSignInData.email);
+  userSignInPassword = JSON.stringify(userSignInData.password);
+
+  const userInput = new UserData(userSignInEmail, userSignInPassword);
+  addData(userInput);
+}
+
+class UserData {
+  constructor(userEmail, userPassword) {
+    this.userEmail = userEmail;
+    this.userPassword = userPassword;
+  }
+}
+
+let storeUserDataArray = [];
+function addData(data) {
+  let userE = data.userEmail;
+  let userP = data.userPassword;
+  storeUserDataArray.push({ userE, userP });
+  console.log(storeUserDataArray);
+}
 
 server.listen(PORT);
