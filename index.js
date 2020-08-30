@@ -9,6 +9,35 @@ mongoose.connect("mongodb+srv://user7:user7@cluster0.gthxj.mongodb.net/<dbname>?
   else console.log("Connected to the mongodb");
 });
 
+// const PostSchema = mongoose.Schema({
+//   userEmail: String,
+//   userPassword: String,
+// });
+const noteSchema = new mongoose.Schema({
+  // content: String,
+  // date: Date,
+  // important: Boolean,
+  userEmail: String,
+  userPassword: String,
+});
+
+const Note = mongoose.model("Note", noteSchema);
+
+const note = new Note({
+  content: "HTML is Easy",
+  date: new Date(),
+  important: true,
+
+  userEmail: String,
+  userPassword: String,
+});
+
+note.save().then((result) => {
+  console.log("note saved!");
+  mongoose.connection.close();
+});
+// -------------------------------------------
+
 const server = http.createServer((req, res) => {
   console.clear();
   if (req.method === "POST") {
