@@ -1,8 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 const http = require("http");
-const queryString = require("querystring");
-const mongoose = require("mongoose");
+const checkUser = require("./libs/check_user");
 
 // -------------------------------------------
 
@@ -61,63 +60,23 @@ const server = http.createServer((req, res) => {
 
 function getRequestData(req, res) {
   const FORM_URLENCODED = "application/x-www-form-urlencoded";
-
   if (req.headers["content-type"] === FORM_URLENCODED) {
     let body = "";
     req.on("data", (chunk) => {
       body += chunk.toString();
     });
     req.on("end", () => {
-      parseRequestData(body);
+      getBody(body);
     });
     res.end(`<h1>Request Send</h1>`);
   }
 }
 const PORT = process.env.PORT || 5000;
-
-function parseRequestData(body) {
-  userSignInData = queryString.parse(body);
-  userSignInEmail = JSON.stringify(userSignInData.email);
-  userSignInPassword = JSON.stringify(userSignInData.password);
-
-  const userInput = new UserData(userSignInEmail, userSignInPassword);
-  addData(userInput);
-}
-
-class UserData {
-  constructor(userEmail, userPassword) {
-    this.userEmail = userEmail;
-    this.userPassword = userPassword;
-  }
-}
-
-function addData(data) {
-  let userE = data.userEmail;
-  let userP = data.userPassword;
-
-  // ------------------------------------------------------
-
-  mongoose.connect("mongodb+srv://user7:user7@cluster0.gthxj.mongodb.net/<dbname>?retryWrites=true&w=majority", { useUnifiedTopology: true, useNewUrlParser: true }, (err) => {
-    if (err) console.error(err);
-    else console.log("Connected to the mongodb");
-  });
-
-  const noteSchema = new mongoose.Schema({
-    userEmail: String,
-    userPassword: String,
-  });
-
-  const Note = mongoose.model("Note", noteSchema);
-
-  const note = new Note({
-    userEmail: userE,
-    userPassword: userP,
-  });
-
-  note.save().then((result) => {
-    console.log("note saved!");
-    mongoose.connection.close();
-  });
-}
-
 server.listen(PORT);
+
+function getBody(reqbody) {
+  let body = reqbody;
+  return body;
+}
+
+module.exports = getBody();

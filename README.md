@@ -6,7 +6,15 @@
 $ npm init
 ```
 
-### Install nodemon
+### Install dependencies
+
+```shell
+$ npm i express bcryptjs passport
+	passport-local ejs express-ejs-layouts
+	connect-flash express-session mongoose
+```
+
+### Install devDependencies
 
 ```shell
 $ npm install --save-dev nodemon
@@ -15,7 +23,7 @@ $ npm run dev
 
 ---
 
-### Heroku initial Deploy
+### Heroku initial deploy
 
 ```shell
 $ heroku login
@@ -29,7 +37,7 @@ $ heroku open
 
 ```shell
 $ git add .
-$ git commit -am "make it better"
+$ git commit -am "commit"
 $ git push heroku master
 ```
 
