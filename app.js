@@ -14,6 +14,11 @@ mongoose
   .then(() => console.log("Connected to DB"))
   .catch((err) => console.log(err));
 
+// mongoose.connect("mongodb+srv://user7:user7@cluster0.gthxj.mongodb.net/<dbname>?retryWrites=true&w=majority", { useUnifiedTopology: true, useNewUrlParser: true }, (err) => {
+//   if (err) console.error(err);
+//   else console.log("Connected to the mongodb");
+// });
+
 // ---- EJS
 app.use(expressLayouts);
 app.set("view engine", "ejs");
