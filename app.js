@@ -8,23 +8,21 @@ app.use(express.static(__dirname + "/public"));
 
 // ---- MongoDB Config
 const db = require("./config/keys").MongoURI;
+
 // ---- Connect to DB
 mongoose
   .connect(db, { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true })
   .then(() => console.log("Connected to DB"))
   .catch((err) => console.log(err));
 
-// mongoose.connect("mongodb+srv://user7:user7@cluster0.gthxj.mongodb.net/<dbname>?retryWrites=true&w=majority", { useUnifiedTopology: true, useNewUrlParser: true }, (err) => {
-//   if (err) console.error(err);
-//   else console.log("Connected to the mongodb");
-// });
+//--- Body Parser
+app.use(express.urlencoded({ extended: false }));
 
 // ---- EJS
 app.use(expressLayouts);
 app.set("view engine", "ejs");
 
 //---- Connect routers
-
 app.use("/", require("./routes/index"));
 app.use("/users", require("./routes/users"));
 
