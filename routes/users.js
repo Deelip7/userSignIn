@@ -64,12 +64,20 @@ function passwordValidation(pass1, pass2) {
   return errors;
 }
 
+// Login POST
 router.post("/login", (req, res, next) => {
   passport.authenticate("local", {
     successRedirect: "/dashboard",
     failureRedirect: "/users/login",
     failureFlash: true,
   })(req, res, next);
+});
+
+// Logout Get
+router.get("/logout", (req, res) => {
+  req.logout();
+  req.flash("success_msg", "Logged out");
+  res.redirect("/users/login");
 });
 
 module.exports = router;
