@@ -11,7 +11,7 @@ router.post("/register", (req, res) => {
   const passErrorMsg = passwordValidation(password, password2);
 
   if (passErrorMsg.length > 0) {
-    res.render("register", { passErrorMsg });
+    res.render("register", { passErrorMsg, name, email, password, password2 });
   } else {
     res.send("Pass");
   }
@@ -21,9 +21,9 @@ router.post("/register", (req, res) => {
 function passwordValidation(pass1, pass2) {
   let errors = [];
   if (pass1 !== pass2) {
-    errors.push({ msg: "Passwords do not match" });
+    errors.push({ msg: "Passwords must match" });
   } else if (pass1.length < 7) {
-    errors.push({ msg: "Password should be at least 7 characters" });
+    errors.push({ msg: "Password must be at least 7 characters" });
   }
   return errors;
 }
